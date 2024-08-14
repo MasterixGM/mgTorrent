@@ -1,0 +1,35 @@
+#SignUpLabel {
+    font-weight: 800;
+    margin-top: 10px;
+}
+
+#SignUpSubLabel {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+#TextFields {
+    border-radius: 20px;
+    padding-left: 20px;
+    margin-bottom: 10;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid lightgrey;
+}
+
+#TextFields:focus {
+    border: 2px solid #00e9c2;
+}
+
+#TermsLabel {
+    margin-bottom: 115px;
+}
+
+#WelcomeLabel {
+    margin-top: auto;
+    color: white;
+}
+
+#PlatformLabel {
+    margin-bottom: 430px;
+    color: white;
+}

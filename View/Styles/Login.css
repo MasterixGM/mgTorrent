@@ -1,0 +1,42 @@
+#SignInLabel {
+    font-weight: 800;
+    margin-top: 10px;
+}
+
+#SignInText {
+   font-weight: 600;
+   margin-bottom: 10px;
+}
+
+#UsernameText, #PasswordText {
+    font-size: 15px;
+    border-radius: 20px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#SignInBttn:hover, #EnterGuestBttn:hover { /* Implementar Hover en condiciones */
+    background-color: #00a27f;
+}
+
+#RegisterLabel, #ForgotLabel {
+    color: blue;
+}
+
+#RememberCheck {
+    font-weight: bold;
+}
+
+#orLabel {
+    font-weight: 800;
+}
+
+#WelcomeLabel {
+    margin-top: auto;
+    color: white;
+}
+
+#PlatformLabel {
+    margin-bottom: 430px;
+    color: white;
+}
