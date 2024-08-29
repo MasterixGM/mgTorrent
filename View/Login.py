@@ -1,13 +1,16 @@
 import sys
+
 sys.path.append(r'mgTorrent')
-from Util import ViewFunctions as vf
+from Util.ViewFunctions import ViewFunctions as vf
+from Controller.LoginController import ControladorLogin as LC
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QCheckBox, QHBoxLayout, QPushButton, QDesktopWidget
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 
-class MainWindow(QMainWindow):
-    def __init__(self):
+class Login(QMainWindow):
+    def __init__(self, controller):
         super().__init__()
+        self.controller = controller
         self.initUI()
 
     def initUI(self):
@@ -132,6 +135,7 @@ class MainWindow(QMainWindow):
                                             stop: 1 rgba(0, 233, 194, 1));
             }
         """)
+        SignInBttn.clicked.connect(lambda: self.controller.login(UsernameText.text(), PasswordText.text()))
         leftLayout.addWidget(SignInBttn, alignment=Qt.AlignCenter)
 
         #Guest Button and 'OR' text
@@ -167,6 +171,7 @@ class MainWindow(QMainWindow):
                                             stop: 1 rgba(0, 233, 194, 1));
             }
         """)
+        EnterGuestbttn.clicked.connect(self.controller.login_as_guest)
         leftLayout.addWidget(EnterGuestbttn, alignment=Qt.AlignCenter)
 
         # Register Label
@@ -217,7 +222,9 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__": #View Load
     app = QApplication(sys.argv)
-    window = MainWindow()
+    controller = LC()
+    window = Login(controller)
+    controller.set_login_view(window)
     window.center()
     window.show()
     sys.exit(app.exec_())

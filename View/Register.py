@@ -1,8 +1,8 @@
 import sys
 sys.path.append(r'mgTorrent')
-from Util import ViewFunctions as vf
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QHBoxLayout, QPushButton, QDesktopWidget, QCheckBox
-from PyQt5.QtGui import QFont, QColor, QPalette
+from Util.ViewFunctions import ViewFunctions as vf
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QHBoxLayout, QPushButton, QDesktopWidget
+from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 
 class MainWindow(QMainWindow):
