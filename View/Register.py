@@ -1,18 +1,22 @@
-import sys
+import sys, re
 sys.path.append(r'mgTorrent')
 from Util.ViewFunctions import ViewFunctions as vf
+from Controller.RegisterController import RegisterController as RC
+from Util.MessageHandler import MessageHandler
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QHBoxLayout, QPushButton, QDesktopWidget
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 
-class MainWindow(QMainWindow):
-    def __init__(self):
+class Register(QMainWindow):
+    def __init__(self, registerController):
         super().__init__()
+        self.registerController = registerController()
+        self.message_handler = MessageHandler(self)
         self.initUI()
 
     def initUI(self):
         self.setFixedSize(1440, 1024)  # Fixed Window Size
-        self.setWindowTitle("SIGN UP") # Window title
+        self.setWindowTitle("SIGN UP")  # Window title
         
         self.centralwidget = QWidget(self)
         self.setCentralWidget(self.centralwidget)
@@ -22,16 +26,16 @@ class MainWindow(QMainWindow):
         # Left Widget
         leftWidget = QWidget(self.centralwidget)
         leftLayout = QVBoxLayout(leftWidget)
-        leftLayout.setContentsMargins(150, 245, 200, 245) # Left, Top, Right, Bottom 
+        leftLayout.setContentsMargins(150, 245, 200, 245)  # Left, Top, Right, Bottom 
         mainLayout.addWidget(leftWidget, 2)
 
         # Welcome message
         MensajeSIGN = QVBoxLayout()
-        MensajeSIGN.setSpacing(10) # Espaciado entre textos
+        MensajeSIGN.setSpacing(10)
         
         # SIGN UP text
         SIGNUP = QLabel()
-        SIGNUP.setFont(QFont("Segoe UI", 28, QFont.Bold)) # Tamaño de fuente más grande
+        SIGNUP.setFont(QFont("Segoe UI", 28, QFont.Bold))
         SIGNUP.setText("SIGN UP")
         SIGNUP.setObjectName("SignUpLabel")
         SIGNUP.setAlignment(Qt.AlignCenter)
@@ -48,18 +52,30 @@ class MainWindow(QMainWindow):
         leftLayout.addLayout(MensajeSIGN)
 
         # Text Fields for Email, Username and Password
-        fields = ["Email.", "Username.", "Password."]
-        for placeholder in fields:
-            textField = QLineEdit(self)
-            textField.setPlaceholderText(placeholder)
-            textField.setFont(QFont("Segoe UI", 12))
-            textField.setObjectName("TextFields")
-            textField.setFixedHeight(60)
-            textField.setFixedWidth(360)
-            
-            if placeholder == "Password.":
-                textField.setEchoMode(QLineEdit.Password)
-            leftLayout.addWidget(textField)
+        self.emailField = QLineEdit(self)
+        self.emailField.setPlaceholderText("Email.")
+        self.emailField.setFont(QFont("Segoe UI", 12))
+        self.emailField.setObjectName("TextFields")
+        self.emailField.setFixedHeight(60)
+        self.emailField.setFixedWidth(360)
+        leftLayout.addWidget(self.emailField)
+
+        self.usernameField = QLineEdit(self)
+        self.usernameField.setPlaceholderText("Username.")
+        self.usernameField.setFont(QFont("Segoe UI", 12))
+        self.usernameField.setObjectName("TextFields")
+        self.usernameField.setFixedHeight(60)
+        self.usernameField.setFixedWidth(360)
+        leftLayout.addWidget(self.usernameField)
+
+        self.passwordField = QLineEdit(self)
+        self.passwordField.setPlaceholderText("Password.")
+        self.passwordField.setFont(QFont("Segoe UI", 12))
+        self.passwordField.setObjectName("TextFields")
+        self.passwordField.setFixedHeight(60)
+        self.passwordField.setFixedWidth(360)
+        self.passwordField.setEchoMode(QLineEdit.Password)
+        leftLayout.addWidget(self.passwordField)
 
         # Sign Up Button
         SignUpBttn = QPushButton()
@@ -84,6 +100,7 @@ class MainWindow(QMainWindow):
                                             stop: 1 rgba(0, 233, 194, 1));
             }
         """)
+        SignUpBttn.clicked.connect(self.handle_register)
         leftLayout.addWidget(SignUpBttn, alignment=Qt.AlignCenter)
 
         # Terms and Conditions
@@ -125,16 +142,41 @@ class MainWindow(QMainWindow):
         
         vf.load_stylesheet(self, "mgTorrent\View\Styles\Register.css")
 
-    def center(self):
-        qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
-                
-            
+    def handle_register(self):
+        # This Way i Get the Data on the TextField Fields
+        email = self.emailField.text()
+        username = self.usernameField.text()
+        password = self.passwordField.text()
+
+        # This way i check for Blanks on the fields
+        if not username:
+            self.message_handler.showErrorMessage("Username is required")
+            return
+
+        if not password:
+            self.message_handler.showErrorMessage("Password is required")
+            return
+
+        if not email:
+            self.message_handler.showErrorMessage("Email is required")
+            return
+        
+        # Validate email format
+        email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        if not re.match(email_regex, email):
+            self.message_handler.showErrorMessage("Invalid email format")
+            return
+        
+        self.registerController.register(username, password, email)
+       
+    def show_and_center(self):
+        self.show()
+        qtRectangle = self.frameGeometry()  # Obtains the Window Rectangle Geometry
+        centerPoint = QDesktopWidget().availableGeometry().center()  # Finds the center of the screen
+        qtRectangle.moveCenter(centerPoint)  # Moves the rectangle to the center
+        self.move(qtRectangle.topLeft())  # Moves the window to top-Left to Center it.   
+                    
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = MainWindow()
-    window.center()
-    window.show()
+    registerController = RC()
     sys.exit(app.exec_())

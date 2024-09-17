@@ -10,4 +10,4 @@ class ViewFunctions:
                 stylesheet = f.read()
                 self.setStyleSheet(stylesheet)
         except:
-            print("Error Loading the StyleSheet")       
+            print("Error Loading the StyleSheet")

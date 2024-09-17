@@ -3,14 +3,15 @@ import sys
 sys.path.append(r'mgTorrent')
 from Util.ViewFunctions import ViewFunctions as vf
 from Controller.LoginController import ControladorLogin as LC
+from Controller.RegisterController import RegisterController as RC
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QCheckBox, QHBoxLayout, QPushButton, QDesktopWidget
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 
 class Login(QMainWindow):
-    def __init__(self, controller):
+    def __init__(self, loginController):
         super().__init__()
-        self.controller = controller
+        self.loginController = loginController
         self.initUI()
 
     def initUI(self):
@@ -135,7 +136,7 @@ class Login(QMainWindow):
                                             stop: 1 rgba(0, 233, 194, 1));
             }
         """)
-        SignInBttn.clicked.connect(lambda: self.controller.login(UsernameText.text(), PasswordText.text()))
+        SignInBttn.clicked.connect(lambda: self.loginController.login(UsernameText.text(), PasswordText.text()))
         leftLayout.addWidget(SignInBttn, alignment=Qt.AlignCenter)
 
         #Guest Button and 'OR' text
@@ -171,12 +172,14 @@ class Login(QMainWindow):
                                             stop: 1 rgba(0, 233, 194, 1));
             }
         """)
-        EnterGuestbttn.clicked.connect(self.controller.login_as_guest)
+        EnterGuestbttn.clicked.connect(self.loginController.login_as_guest)
         leftLayout.addWidget(EnterGuestbttn, alignment=Qt.AlignCenter)
 
         # Register Label
         RegisterLabel = QLabel()
         RegisterLabel.setText("<html><head/><body><p>Don't have an account? <a href='#'><span style=\" color:#0055ff;\">Register</span></a></p></body></html>")
+        RegisterLabel.setOpenExternalLinks(False) # Prevent the link from opening in a browser
+        RegisterLabel.linkActivated.connect(self.loginController.registerClick)
         RegisterLabel.setAlignment(Qt.AlignCenter)
         leftLayout.addWidget(RegisterLabel)
 
@@ -222,9 +225,9 @@ class Login(QMainWindow):
 
 if __name__ == "__main__": #View Load
     app = QApplication(sys.argv)
-    controller = LC()
-    window = Login(controller)
-    controller.set_login_view(window)
+    loginController = LC()
+    window = Login(loginController)
+    loginController.set_login_view(window)
     window.center()
     window.show()
     sys.exit(app.exec_())
