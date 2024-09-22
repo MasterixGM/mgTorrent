@@ -1,0 +1,20 @@
+#frame {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 20%;
+}
+
+#TorrentNameLabel {
+    color: white;
+    font-weight: 500;
+}
+
+#CurrentDownloadLabel, #CurrentUploadLabel, #DownloadTimeLabel, #InfoLabel, #PauseLabel, #PercentageProgressBar{
+    color: white;
+    font-weight: 500;
+}
+
+#InfoBTTN, #PauseBTTN {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: black;
+    color: white;
+}

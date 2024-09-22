@@ -1,20 +1,22 @@
 import sys
 sys.path.append(r'mgTorrent')
 from Util.ViewFunctions import ViewFunctions as vf
-# from Controller.MainWindowController import MainWindowController as MC
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QApplication
-
-
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDesktopWidget, QWidget
+from Controller.MainWindowController import MainController as MC
+from View.DownloadBar import Ui_Form as DownloadBar
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, mainController):
         super().__init__()
+        self.mainController = mainController
+        self.mainController.set_main_view(self)
         self.initUi(self)
         self.setWindowTitle("mgTorrent")
-    
+        self.init_controller_connections()
+        
     def initUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1440, 1024)
+        self.setObjectName("MainWindow")
+        self.resize(1440, 1024)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         
@@ -30,6 +32,7 @@ class MainWindow(QMainWindow):
         self.DownloadsLayout.setContentsMargins(0, 0, 0, 0)
         self.DownloadsLayout.setObjectName("DownloadsLayout")
         
+        #Present Label when there ain't downloads Ready
         self.NoDownloadsLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
@@ -39,6 +42,7 @@ class MainWindow(QMainWindow):
         self.NoDownloadsLabel.setObjectName("NoDownloadsLabel")
         self.DownloadsLayout.addWidget(self.NoDownloadsLabel)
         
+        # Side Bar and Buttons
         self.SideBar = QtWidgets.QFrame(self.centralwidget)
         self.SideBar.setGeometry(QtCore.QRect(-1, -1, 80, 1021))
         self.SideBar.setObjectName("SideBar")
@@ -143,6 +147,7 @@ class MainWindow(QMainWindow):
         self.SettingsLABEL.setFont(font)
         self.SettingsLABEL.setObjectName("SettingsLABEL")
         
+        # Top Bar with search bar and support Button
         self.TopBar = QtWidgets.QFrame(self.centralwidget)
         self.TopBar.setGeometry(QtCore.QRect(80, 0, 1351, 41))
         self.TopBar.setObjectName("TopBar")
@@ -357,7 +362,6 @@ class MainWindow(QMainWindow):
         self.SeeAllTorrentsBTTN.setObjectName("SeeAllTorrentsBTTN")
         
         MainWindow.setCentralWidget(self.centralwidget)
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -386,10 +390,27 @@ class MainWindow(QMainWindow):
         self.SeeAllTorrentsBTTN.setText(_translate("MainWindow", "SEE ALL TORRENTS"))
 
         vf.load_stylesheet(self, "mgTorrent\View\Styles\Main.css")
-
+        
+    #This method connects the UI components to the controller methods.    
+    def init_controller_connections(self):
+        # Connecting sidebar buttons to controller methods
+        self.LogoutBTTN.clicked.connect(self.mainController.logout)
+        self.BrowseBTTN.clicked.connect(self.mainController.browse) 
+    
+    def hideLabels(self):
+        self.NoDownloadsLabel.hide()    
+        
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())    
+        
 if __name__ == "__main__":
-
+    
     app = QApplication(sys.argv)
-    window = MainWindow()
+    download_controller = MC(DownloadBar)
+    window = MainWindow(download_controller)
     window.show()
+    window.center()
     sys.exit(app.exec_())

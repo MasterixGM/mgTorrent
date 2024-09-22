@@ -2,8 +2,8 @@ import sys, os, logging
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from PyQt5.QtWidgets import QApplication
 from Util.MessageHandler import MessageHandler
-from View.MainWindow import MainWindow
 from View.Register import Register
+from View.MainWindow import MainWindow
 from Controller.RegisterController import RegisterController
 from Util.DBHandler import DBManager
 
@@ -23,6 +23,7 @@ class ControladorLogin:
         self.message_Handler = MessageHandler(self.login_view)  # Pass the parent widget to MessageHandler
 
     def login(self, user_or_email, password):
+        from View.MainWindow import MainWindow
         try:
             # Log para verificar los valores de entrada
             self.logger.debug(f"Attempting login for: {user_or_email}")
