@@ -1,3 +1,4 @@
+import logging
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 from Controller.DownloadBarController import DownloadBarController
@@ -5,10 +6,12 @@ from Util.ViewFunctions import ViewFunctions as vf
 class Ui_Form(QWidget):
     def __init__(self):
         super().__init__()
+        self.setupUi()
         self.downloadController = DownloadBarController(self)
         if self.downloadController.download_thread:
             self.downloadController.download_thread.progress_updated.connect(self.update_ui)
-        self.setupUi()
+        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',handlers=[logging.FileHandler("mgTorrent.log"), logging.StreamHandler()])
+        self.logger = logging.getLogger(__name__)    
 
     def setupUi(self):
         self.setObjectName("Form")
@@ -47,7 +50,7 @@ class Ui_Form(QWidget):
         self.DownloadIcon.setObjectName("DownloadIcon")
 
         self.CurrentDownloadLabel = QtWidgets.QLabel(self.frame)
-        self.CurrentDownloadLabel.setGeometry(QtCore.QRect(175, 55, 81, 16))
+        self.CurrentDownloadLabel.setGeometry(QtCore.QRect(175, 55, 85, 16))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(13)
@@ -55,7 +58,7 @@ class Ui_Form(QWidget):
         self.CurrentDownloadLabel.setObjectName("CurrentDownloadLabel")
 
         self.CurrentUploadLabel = QtWidgets.QLabel(self.frame)
-        self.CurrentUploadLabel.setGeometry(QtCore.QRect(325, 55, 81, 16))
+        self.CurrentUploadLabel.setGeometry(QtCore.QRect(325, 55, 85, 16))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(13)
@@ -91,7 +94,7 @@ class Ui_Form(QWidget):
         self.progressBar.setObjectName("progressBar")
 
         self.PercentageProgressBar = QtWidgets.QLabel(self.frame)
-        self.PercentageProgressBar.setGeometry(QtCore.QRect(910, 68, 21, 20))
+        self.PercentageProgressBar.setGeometry(QtCore.QRect(910, 68, 23, 20))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(8)
@@ -162,9 +165,15 @@ class Ui_Form(QWidget):
         self.PauseLabel.setText(_translate("Form", "PAUSE"))
     
     def update_ui(self, progress, download_rate, upload_rate, remaining_time):
-
-        self.progressBar.setValue(progress)
-        self.PercentageProgressBar.setText(f"{progress}%")
-        self.CurrentDownloadLabel.setText(download_rate)
-        self.CurrentUploadLabel.setText(upload_rate)
-        self.DownloadTimeLabel.setText(remaining_time)
+        # Here the UI updates with the download info
+        logging.info(f"UI updated with progress: {progress}, download_rate: {download_rate}, upload_rate: {upload_rate}, remaining_time: {remaining_time}")
+        
+        try:
+            self.progressBar.setValue(progress)
+            self.CurrentDownloadLabel.setText(download_rate)
+            self.CurrentUploadLabel.setText(upload_rate)
+            self.DownloadTimeLabel.setText(remaining_time)
+            self.PercentageProgressBar.setText(f"{progress}%")
+            
+        except Exception as e:
+            logging.error("Error at download updating ui: " + str(e))

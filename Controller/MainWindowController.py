@@ -22,6 +22,7 @@ class MainController:
     #Called when the 'Browse' button is clicked.
     def browse(self):
         from View.DownloadBar import Ui_Form  # Import the UI class for the download bar
+        from Util.TorrentManager import TorrentManager as tm
         
         self.logger.info("Browse button clicked")
         
@@ -31,15 +32,18 @@ class MainController:
         if browseFile[0]:  # If a file is selected
             torrent_file = browseFile[0]
             
-            self.start_download(torrent_file, "./Downloads")  # Start the download process
-            self.main_view.NoDownloadsLabel.hide()
-            # Create a new widget for the download
-            downloadBar = Ui_Form()
-            self.main_view.DownloadsLayout.addWidget(downloadBar)
+            if tm.is_torrent_downloaded(self, torrent_file, "./Downloads"):
+                mh.showInfoMessage(self, "Torrent already downloaded")
+                return
+            else:
+                self.main_view.NoDownloadsLabel.hide()
+                # Create a new widget for the download
+                downloadBar = Ui_Form()
+                self.main_view.DownloadsLayout.addWidget(downloadBar)
 
-            # Create a controller to manage the download
-            controller = DownloadBarController(downloadBar)
-            controller.start_download(torrent_file, "./Downloads")
+                # Create a controller to manage the download
+                controller = DownloadBarController(downloadBar)
+                controller.start_download(torrent_file, "./Downloads") # Start the download process
             
     #Starts the download of a torrent file.
     def start_download(self, torrent_file, save_path):
@@ -50,14 +54,9 @@ class MainController:
              # Call the method to start the download from the download bar controller
             download_instance.start_download(torrent_file, save_path)
             self.logger.info(f"Started download: {torrent_file}")
-            self.monitor_download_progress()  # Start monitoring the download progress
             download_instance.download_thread.finished.connect(download_instance.deleteLater)
         except Exception as e:
             self.handle_error(e)  # Handle errors that may occur during the download
-     
-    #Monitors the progress of the ongoing download.
-    def monitor_download_progress(self):
-        pass
             
     # Update the progress bar in the UI
     def update_progress_bar(self, progress):
