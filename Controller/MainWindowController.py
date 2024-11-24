@@ -2,7 +2,7 @@ import sys, os, logging
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from PyQt5.QtWidgets import QFileDialog
 from Controller.DownloadBarController import DownloadBarController
-from Util.MessageHandler import MessageHandler as mh
+from Model.MessageHandler import MessageHandler as mh
 
 class MainController:
     def __init__(self, ui):
@@ -10,7 +10,7 @@ class MainController:
         logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',handlers=[logging.FileHandler("mgTorrent.log"), logging.StreamHandler()])
         self.logger = logging.getLogger(__name__)
         self.ui = ui
-        self.download_bar_controller = DownloadBarController(self.ui)  # Download bar controller
+        self.download_bar_controller = DownloadBarController(self)  # Download bar controller
         self.active_Downloads = [] # List of active Downloads
         self.main_view = None # Initial initialization of the view
         
@@ -22,7 +22,7 @@ class MainController:
     #Called when the 'Browse' button is clicked.
     def browse(self):
         from View.DownloadBar import Ui_Form  # Import the UI class for the download bar
-        from Util.TorrentManager import TorrentManager as tm
+        from Model.TorrentManager import TorrentManager as tm
         
         self.logger.info("Browse button clicked")
         
@@ -80,3 +80,5 @@ class MainController:
         from Controller.LoginController import ControladorLogin
         self.login_view = Login(ControladorLogin)
         self.login_view.show()
+        self.login_view.center()
+        self.main_view.hide()

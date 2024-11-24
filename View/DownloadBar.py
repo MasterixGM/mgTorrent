@@ -2,7 +2,7 @@ import logging
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 from Controller.DownloadBarController import DownloadBarController
-from Util.ViewFunctions import ViewFunctions as vf
+from Model.ViewFunctions import ViewFunctions as vf
 class Ui_Form(QWidget):
     def __init__(self):
         super().__init__()
@@ -28,7 +28,7 @@ class Ui_Form(QWidget):
         self.Icon.setGeometry(QtCore.QRect(30, 10, 80, 80))
         self.Icon.setFrameShape(QtWidgets.QFrame.Box)
         self.Icon.setText("")
-        self.Icon.setPixmap(QtGui.QPixmap("mgTorrent/View/Material Icons/download.png"))
+        self.Icon.setPixmap(QtGui.QPixmap("View/Material Icons/download.png"))
         self.Icon.setScaledContents(True)
         self.Icon.setObjectName("Icon")
 
@@ -45,7 +45,7 @@ class Ui_Form(QWidget):
         self.DownloadIcon = QtWidgets.QLabel(self.frame)
         self.DownloadIcon.setGeometry(QtCore.QRect(138, 45, 31, 31))
         self.DownloadIcon.setText("")
-        self.DownloadIcon.setPixmap(QtGui.QPixmap("mgTorrent/View/Material Icons/cloud_download.png"))
+        self.DownloadIcon.setPixmap(QtGui.QPixmap("View/Material Icons/cloud_download.png"))
         self.DownloadIcon.setScaledContents(True)
         self.DownloadIcon.setObjectName("DownloadIcon")
 
@@ -68,7 +68,7 @@ class Ui_Form(QWidget):
         self.UploadIcon = QtWidgets.QLabel(self.frame)
         self.UploadIcon.setGeometry(QtCore.QRect(290, 45, 31, 31))
         self.UploadIcon.setText("")
-        self.UploadIcon.setPixmap(QtGui.QPixmap("mgTorrent/View/Material Icons/cloud_upload.png"))
+        self.UploadIcon.setPixmap(QtGui.QPixmap("View/Material Icons/cloud_upload.png"))
         self.UploadIcon.setScaledContents(True)
         self.UploadIcon.setObjectName("UploadIcon")
 
@@ -83,7 +83,7 @@ class Ui_Form(QWidget):
         self.TimeIcon = QtWidgets.QLabel(self.frame)
         self.TimeIcon.setGeometry(QtCore.QRect(420, 45, 31, 31))
         self.TimeIcon.setText("")
-        self.TimeIcon.setPixmap(QtGui.QPixmap("mgTorrent/View/Material Icons/time.png"))
+        self.TimeIcon.setPixmap(QtGui.QPixmap("View/Material Icons/time.png"))
         self.TimeIcon.setScaledContents(True)
         self.TimeIcon.setObjectName("TimeIcon")
 
@@ -111,7 +111,7 @@ class Ui_Form(QWidget):
         self.InfoBTTN.setAutoFillBackground(False)
         self.InfoBTTN.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("mgTorrent/View/Material Icons/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("View/Material Icons/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.InfoBTTN.setIcon(icon)
         self.InfoBTTN.setIconSize(QtCore.QSize(24, 24))
         #self.InfoBTTN.clicked.connect(self.downloadController.show_info)
@@ -127,7 +127,7 @@ class Ui_Form(QWidget):
         self.PauseBTTN.setAutoFillBackground(False)
         self.PauseBTTN.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("mgTorrent/View/Material Icons/pause_circle.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("View/Material Icons/pause_circle.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.PauseBTTN.setIcon(icon1)
         self.PauseBTTN.setIconSize(QtCore.QSize(24, 24))
         #self.PauseBTTN.clicked.connect(self.downloadController.pause_download)
@@ -151,7 +151,7 @@ class Ui_Form(QWidget):
 
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
-        vf.load_stylesheet(self, "mgTorrent\View\Styles\DownloadBar.css")
+        vf.load_stylesheet(self, "View\Styles\DownloadBar.css")
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate

@@ -8,19 +8,25 @@
     border-bottom-left-radius: 30%;
 }
 
+#RecentTorrentShowAllFrame {
+    background-color: rgba(183, 228, 199, 1);
+}
+
 #BoxFrame {
     background-color: rgba(183, 228, 199, 1);
     border-top-right-radius: 30%;
     border-top-left-radius: 30%;
 }
 
-#DashboardBTTN, #TorrentsBTTN, #UploadsBTTN, #SettingsBTTN, #LogoutBTTN {
+#HomeBTTN, #TorrentsBTTN, #UploadsBTTN, #SettingsBTTN, #LogoutBTTN {
     background-color: rgba(64, 145, 108, 0.95);
 }
 
-#DashboardLABEL, #TorrentsLABEL, #UploadLABEL, #SettingsLABEL  ,#LogoutLABEL {
+#HomeLABEL, #TorrentsLABEL, #UploadLABEL, #SettingsLABEL  ,#LogoutLABEL {
     color: white;
     font-weight: 600;
+    margin-bottom: 5px;
+    
 }
 
 #NoDownloadsLabel, #RecentTorrents {
@@ -31,6 +37,7 @@
 #BytesUpBox {
     border-radius: 30%;
     background-color: rgba(82, 183, 136, 0.8);
+    border: 1px solid black;
 }
 
 #UpLabel, #UploadSizeLabel {
@@ -38,9 +45,14 @@
     font-size: 600;
 }
 
+#UpLabel {
+    margin-bottom: 10px;
+}
+
 #BytesDownBox {
     border-radius: 30%;
     background-color: rgba(45, 106, 79, 0.4);
+    border: 1px solid black;
 }
 
 #DownLabel, #DownloadSizeLabel {
@@ -48,9 +60,14 @@
     font-size: 600;
 }
 
+#DownLabel {
+    margin-bottom: 10px;
+}
+
 #TotalDownBox {
     border-radius: 30%;
     background-color: rgba(8, 28, 21, 0.4);
+    border: 1px solid black;
 }
 
 #TotalDownloadLabel, #TotalLabel {
@@ -58,9 +75,14 @@
     font-size: 600;
 }
 
+#TotalLabel {
+    margin-bottom: 10px;
+}
+
 #TorrentDownBox {
     border-radius: 30%;
     background-color: rgba(0, 0, 0, 0.65);
+    border: 1px solid black;
 }
 
 #TorrentDownSizeLabel {
@@ -85,11 +107,17 @@
 
 #HelpSupport {
     color: white;
-    font-size: 600;
+    font-size: 700;
+    margin-right: 5px;
 }
 
 #SearchBar{
     background-color: rgba(64, 145, 108, 0.95);
     color: white;
     font-weight: 600;
+    margin-bottom: 10px;
+}
+
+#SearchIcon, #HelpSupportIcon{
+    margin-bottom: 13px;
 }

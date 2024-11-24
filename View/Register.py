@@ -1,8 +1,8 @@
 import sys, re
 sys.path.append(r'mgTorrent')
-from Util.ViewFunctions import ViewFunctions as vf
+from Model.ViewFunctions import ViewFunctions as vf
 from Controller.RegisterController import RegisterController as RC
-from Util.MessageHandler import MessageHandler
+from Model.MessageHandler import MessageHandler
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QHBoxLayout, QPushButton, QDesktopWidget
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
@@ -140,7 +140,7 @@ class Register(QMainWindow):
         PlatformLabel.setAlignment(Qt.AlignCenter)
         rightLayout.addWidget(PlatformLabel)
         
-        vf.load_stylesheet(self, "mgTorrent\View\Styles\Register.css")
+        vf.load_stylesheet(self, "View\Styles\Register.css")
 
     def handle_register(self):
         # This Way i Get the Data on the TextField Fields

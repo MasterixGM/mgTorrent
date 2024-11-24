@@ -1,7 +1,7 @@
 import sys, logging
 from PyQt5.QtWidgets import QApplication
-from Util.MessageHandler import MessageHandler
-from Util.DBHandler import DBManager
+from Model.MessageHandler import MessageHandler
+from Model.DBHandler import DBManager
 
 class RegisterController:
     def __init__(self):
@@ -10,7 +10,6 @@ class RegisterController:
         self.message_handler = MessageHandler(self)
         self.db_manager = DBManager()
         self.login_window = None
-        self.main_window = None
         self.register_view = None
 
     def set_login_window(self, login_window):
@@ -19,9 +18,6 @@ class RegisterController:
     def set_register_view(self, register_view):
         self.register_view = register_view
         self.message_handler = MessageHandler(self.register_view)
-
-    def set_main_window(self, main_window):
-        self.main_window = main_window
 
     def register(self, user, password, email):
         try:
@@ -36,13 +32,9 @@ class RegisterController:
 
             if self.login_window:
                 self.login_window.show()
-            else:
-                self.logger.debug("Login Window is not set.")
                 
             if self.register_view:
                 self.register_view.hide()
-            else:
-                self.logger.debug("Register View is not set.")
                 
         except Exception as e:
             self.message_handler.showErrorMessage("An error occurred: {}".format(e))

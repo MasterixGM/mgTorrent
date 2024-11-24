@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append(r'mgTorrent')
-from Util.ViewFunctions import ViewFunctions as vf
+from Model.ViewFunctions import ViewFunctions as vf
 from Controller.LoginController import ControladorLogin as LC
 from Controller.RegisterController import RegisterController as RC
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QCheckBox, QHBoxLayout, QPushButton, QDesktopWidget
@@ -215,13 +215,21 @@ class Login(QMainWindow):
         rightLayout.addWidget(PlatformLabel)
 
         # CSS Stylesheet loading
-        vf.load_stylesheet(self,'mgTorrent\View\Styles\Login.css')
+        vf.load_stylesheet(self,'View\Styles\Login.css')
         
     def center(self):
+        screen_geometry = QDesktopWidget().availableGeometry(self)
+        screen_width = screen_geometry.width()
+        screen_height = screen_geometry.height()
+
+        # Redimensionar la ventana al tamaño de la pantalla (o un porcentaje de ella)
+        self.resize(int(screen_width * 0.8), int(screen_height * 0.8))  # Ajusta al 80% del tamaño de la pantalla
+
+        # Obtener la geometría de la ventana y moverla al centro
         qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
+        cp = QDesktopWidget().availableGeometry(self).center()
         qr.moveCenter(cp)
-        self.move(qr.topLeft())    
+        self.move(qr.topLeft())  # Mover la ventana al centro   
 
 if __name__ == "__main__": #View Load
     app = QApplication(sys.argv)

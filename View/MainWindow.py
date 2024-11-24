@@ -1,6 +1,6 @@
 import sys
 sys.path.append(r'mgTorrent')
-from Util.ViewFunctions import ViewFunctions as vf
+from Model.ViewFunctions import ViewFunctions as vf
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDesktopWidget, QWidget
 from Controller.MainWindowController import MainController as MC
@@ -15,159 +15,60 @@ class MainWindow(QMainWindow):
         self.init_controller_connections()
         
     def initUi(self, MainWindow):
-        self.setObjectName("MainWindow")
-        self.resize(1440, 1024)
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(1470, 1043)
+        
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         
-        self.DownloadsFrame = QtWidgets.QFrame(self.centralwidget)
-        self.DownloadsFrame.setGeometry(QtCore.QRect(80, 540, 1351, 461))
-        self.DownloadsFrame.setObjectName("DownloadsFrame")
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName("gridLayout")
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)  # Elimina los márgenes exteriores
+        self.gridLayout.setSpacing(0)  # Elimina el espaciado entre widgets
         
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.DownloadsFrame)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(39, 19, 1291, 421))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         
-        self.DownloadsLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.DownloadsLayout.setContentsMargins(0, 0, 0, 0)
-        self.DownloadsLayout.setObjectName("DownloadsLayout")
-        
-        #Present Label when there ain't downloads Ready
-        self.NoDownloadsLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(15)
-        self.NoDownloadsLabel.setFont(font)
-        self.NoDownloadsLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.NoDownloadsLabel.setObjectName("NoDownloadsLabel")
-        self.DownloadsLayout.addWidget(self.NoDownloadsLabel)
-        
-        # Side Bar and Buttons
-        self.SideBar = QtWidgets.QFrame(self.centralwidget)
-        self.SideBar.setGeometry(QtCore.QRect(-1, -1, 80, 1021))
-        self.SideBar.setObjectName("SideBar")
-        
-        self.LogoutBTTN = QtWidgets.QPushButton(self.SideBar)
-        self.LogoutBTTN.setGeometry(QtCore.QRect(25, 950, 31, 31))
-        self.LogoutBTTN.setFlat(True)
-        self.LogoutBTTN.setCursor(QtCore.Qt.PointingHandCursor)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\logout.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.LogoutBTTN.setIcon(icon)
-        self.LogoutBTTN.setIconSize(QtCore.QSize(35, 35))
-        self.LogoutBTTN.setObjectName("LogoutBTTN")
-        
-        self.LogoutLABEL = QtWidgets.QLabel(self.SideBar)
-        self.LogoutLABEL.setGeometry(QtCore.QRect(19, 985, 51, 20))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.LogoutLABEL.setFont(font)
-        self.LogoutLABEL.setObjectName("LogoutLABEL")
-        
-        self.SettingsBTTN = QtWidgets.QPushButton(self.SideBar)
-        self.SettingsBTTN.setGeometry(QtCore.QRect(25, 510, 31, 31))
-        self.SettingsBTTN.setFlat(True)
-        self.SettingsBTTN.setCursor(QtCore.Qt.PointingHandCursor)
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\settings.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.SettingsBTTN.setIcon(icon1)
-        self.SettingsBTTN.setIconSize(QtCore.QSize(35, 35))
-        self.SettingsBTTN.setObjectName("SettingsBTTN")
-        
-        self.UploadsBTTN = QtWidgets.QPushButton(self.SideBar)
-        self.UploadsBTTN.setGeometry(QtCore.QRect(25, 440, 31, 31))
-        self.UploadsBTTN.setFlat(True)
-        self.UploadsBTTN.setCursor(QtCore.Qt.PointingHandCursor)
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\cloud_upload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.UploadsBTTN.setIcon(icon2)
-        self.UploadsBTTN.setIconSize(QtCore.QSize(35, 35))
-        self.UploadsBTTN.setObjectName("UploadsBTTN")
-        
-        self.TorrentsBTTN = QtWidgets.QPushButton(self.SideBar)
-        self.TorrentsBTTN.setGeometry(QtCore.QRect(25, 370, 31, 31))
-        self.TorrentsBTTN.setFlat(True)
-        self.TorrentsBTTN.setCursor(QtCore.Qt.PointingHandCursor)
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\hard_drive_2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.TorrentsBTTN.setIcon(icon3)
-        self.TorrentsBTTN.setIconSize(QtCore.QSize(35, 35))
-        self.TorrentsBTTN.setObjectName("TorrentsBTTN")
-        
-        self.DashboardBTTN = QtWidgets.QPushButton(self.SideBar)
-        self.DashboardBTTN.setGeometry(QtCore.QRect(25, 300, 31, 31))
-        self.DashboardBTTN.setFlat(True)
-        self.DashboardBTTN.setCursor(QtCore.Qt.PointingHandCursor)
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\home.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.DashboardBTTN.setIcon(icon4)
-        self.DashboardBTTN.setIconSize(QtCore.QSize(35, 35))
-        self.DashboardBTTN.setObjectName("DashboardBTTN")
-        
-        self.DashboardLABEL = QtWidgets.QLabel(self.SideBar)
-        self.DashboardLABEL.setGeometry(QtCore.QRect(8, 335, 71, 16))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.DashboardLABEL.setFont(font)
-        self.DashboardLABEL.setObjectName("DashboardLABEL")
-        
-        self.TorrentsLABEL = QtWidgets.QLabel(self.SideBar)
-        self.TorrentsLABEL.setGeometry(QtCore.QRect(13, 405, 61, 16))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.TorrentsLABEL.setFont(font)
-        self.TorrentsLABEL.setObjectName("TorrentsLABEL")
-        
-        self.UploadLABEL = QtWidgets.QLabel(self.SideBar)
-        self.UploadLABEL.setGeometry(QtCore.QRect(18, 475, 51, 16))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.UploadLABEL.setFont(font)
-        self.UploadLABEL.setObjectName("UploadLABEL")
-        
-        self.SettingsLABEL = QtWidgets.QLabel(self.SideBar)
-        self.SettingsLABEL.setGeometry(QtCore.QRect(15, 545, 51, 16))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.SettingsLABEL.setFont(font)
-        self.SettingsLABEL.setObjectName("SettingsLABEL")
-        
-        # Top Bar with search bar and support Button
         self.TopBar = QtWidgets.QFrame(self.centralwidget)
-        self.TopBar.setGeometry(QtCore.QRect(80, 0, 1351, 41))
+        self.TopBar.setMaximumSize(QtCore.QSize(16777215, 41))
         self.TopBar.setObjectName("TopBar")
         
-        self.SearchBar = QtWidgets.QLineEdit(self.TopBar)
-        self.SearchBar.setGeometry(QtCore.QRect(40, 10, 1000, 22))
-        self.SearchBar.setToolTip("")
-        self.SearchBar.setFrame(False)
-        self.SearchBar.setObjectName("SearchBar")
+        self.TopBarLayout = QtWidgets.QHBoxLayout(self.TopBar)
+        self.TopBarLayout.setObjectName("TopBarLayout")
         
         self.SearchIcon = QtWidgets.QLabel(self.TopBar)
-        self.SearchIcon.setGeometry(QtCore.QRect(5, 5, 31, 31))
+        self.SearchIcon.setEnabled(True)
+        self.SearchIcon.setMinimumSize(QtCore.QSize(25, 35))
+        self.SearchIcon.setMaximumSize(QtCore.QSize(25, 35))
+        font = QtGui.QFont()
+        font.setBold(False)
+        font.setWeight(50)
+        self.SearchIcon.setFont(font)
         self.SearchIcon.setText("")
-        self.SearchIcon.setPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\search.png"))
+        self.SearchIcon.setPixmap(QtGui.QPixmap("View\Material Icons\search.png"))
         self.SearchIcon.setScaledContents(True)
+        self.SearchIcon.setAlignment(QtCore.Qt.AlignCenter)
         self.SearchIcon.setObjectName("SearchIcon")
         
+        self.TopBarLayout.addWidget(self.SearchIcon)
+        
+        self.SearchBar = QtWidgets.QLineEdit(self.TopBar)
+        self.SearchBar.setMinimumHeight(35)
+        self.SearchBar.setToolTip("")
+        self.SearchBar.setObjectName("SearchBar")
+        self.SearchBar.setFrame(False)
+        
+        self.TopBarLayout.addWidget(self.SearchBar)
+        
+        self.HelpSupportIcon = QtWidgets.QLabel(self.TopBar)
+        self.HelpSupportIcon.setMinimumSize(QtCore.QSize(25, 35))
+        self.HelpSupportIcon.setMaximumSize(QtCore.QSize(25, 35))
+        self.HelpSupportIcon.setText("")
+        self.HelpSupportIcon.setPixmap(QtGui.QPixmap("View\Material Icons\support.png"))
+        self.HelpSupportIcon.setScaledContents(True)
+        self.HelpSupportIcon.setObjectName("HelpSupportIcon")
+        
+        self.TopBarLayout.addWidget(self.HelpSupportIcon)
+        
         self.HelpSupport = QtWidgets.QLabel(self.TopBar)
-        self.HelpSupport.setGeometry(QtCore.QRect(1209, 10, 121, 20))
-        self.HelpSupport.setCursor(QtCore.Qt.PointingHandCursor)
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(9)
@@ -176,19 +77,259 @@ class MainWindow(QMainWindow):
         self.HelpSupport.setFont(font)
         self.HelpSupport.setObjectName("HelpSupport")
         
-        self.HelpSupportIcon = QtWidgets.QLabel(self.TopBar)
-        self.HelpSupportIcon.setGeometry(QtCore.QRect(1175, 5, 31, 31))
-        self.HelpSupportIcon.setText("")
-        self.HelpSupportIcon.setPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\support.png"))
-        self.HelpSupportIcon.setScaledContents(True)
-        self.HelpSupportIcon.setObjectName("HelpSupportIcon")
+        self.TopBarLayout.addWidget(self.HelpSupport)
+        
+        self.gridLayout.addWidget(self.TopBar, 0, 1, 1, 2)
+        
+        self.DownloadsFrame = QtWidgets.QFrame(self.centralwidget)
+        self.DownloadsFrame.setMinimumSize(QtCore.QSize(1351, 461))
+        self.DownloadsFrame.setFrameShape(QtWidgets.QFrame.Box)
+        self.DownloadsFrame.setObjectName("DownloadsFrame")
+        
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.DownloadsFrame)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        
+        self.DownloadsLayout = QtWidgets.QVBoxLayout()
+        self.DownloadsLayout.setObjectName("DownloadsLayout")
+        
+        self.NoDownloadsLabel = QtWidgets.QLabel(self.DownloadsFrame)
+        self.NoDownloadsLabel.setMinimumSize(QtCore.QSize(1000, 0))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(15)
+        self.NoDownloadsLabel.setFont(font)
+        self.NoDownloadsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.NoDownloadsLabel.setObjectName("NoDownloadsLabel")
+        
+        self.DownloadsLayout.addWidget(self.NoDownloadsLabel)
+        
+        self.verticalLayout_2.addLayout(self.DownloadsLayout)
+        
+        self.gridLayout.addWidget(self.DownloadsFrame, 6, 1, 1, 2)
+        
+        self.SideBar = QtWidgets.QFrame(self.centralwidget)
+        self.SideBar.setMinimumSize(QtCore.QSize(100, 0))
+        self.SideBar.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.SideBar.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.SideBar.setObjectName("SideBar")
+        
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.SideBar)
+        self.verticalLayout.setObjectName("verticalLayout")
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
+        
+        self.HomeLayout_2 = QtWidgets.QFrame(self.SideBar)
+        self.HomeLayout_2.setMinimumSize(QtCore.QSize(0, 50))
+        self.HomeLayout_2.setObjectName("HomeLayout_2")
+        
+        self.HomeLayout = QtWidgets.QVBoxLayout(self.HomeLayout_2)
+        self.HomeLayout.setObjectName("HomeLayout")
+        
+        self.HomeBTTN = QtWidgets.QPushButton(self.HomeLayout_2)
+        self.HomeBTTN.setMinimumSize(QtCore.QSize(35, 35))
+        self.HomeBTTN.setMaximumSize(QtCore.QSize(100, 100))
+        font = QtGui.QFont()
+        font.setFamily("MS Sans Serif")
+        self.HomeBTTN.setFont(font)
+        self.HomeBTTN.setAutoFillBackground(False)
+        self.HomeBTTN.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("View\Material Icons\home.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.HomeBTTN.setIcon(icon)
+        self.HomeBTTN.setIconSize(QtCore.QSize(35, 35))
+        self.HomeBTTN.setFlat(True)
+        self.HomeBTTN.setObjectName("HomeBTTN")
+        
+        self.HomeLayout.addWidget(self.HomeBTTN)
+        
+        self.HomeLABEL = QtWidgets.QLabel(self.HomeLayout_2)
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.HomeLABEL.setFont(font)
+        self.HomeLABEL.setAlignment(QtCore.Qt.AlignCenter)
+        self.HomeLABEL.setObjectName("HomeLABEL")
+        
+        self.HomeLayout.addWidget(self.HomeLABEL)
+        
+        self.verticalLayout.addWidget(self.HomeLayout_2)
+        
+        self.torrentsLayout = QtWidgets.QFrame(self.SideBar)
+        self.torrentsLayout.setMinimumSize(QtCore.QSize(0, 50))
+        font = QtGui.QFont()
+        font.setPointSize(3)
+        self.torrentsLayout.setFont(font)
+        self.torrentsLayout.setObjectName("torrentsLayout")
+        
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.torrentsLayout)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        
+        self.TorrentsBTTN = QtWidgets.QPushButton(self.torrentsLayout)
+        self.TorrentsBTTN.setMinimumSize(QtCore.QSize(35, 35))
+        self.TorrentsBTTN.setMaximumSize(QtCore.QSize(100, 100))
+        font = QtGui.QFont()
+        font.setFamily("MS Sans Serif")
+        font.setPointSize(3)
+        self.TorrentsBTTN.setFont(font)
+        self.TorrentsBTTN.setAutoFillBackground(False)
+        self.TorrentsBTTN.setText("")
+        TorrentLabel = QtGui.QIcon()
+        TorrentLabel.addPixmap(QtGui.QPixmap("View\Material Icons\hard_drive_2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.TorrentsBTTN.setIcon(TorrentLabel)
+        self.TorrentsBTTN.setIconSize(QtCore.QSize(35, 35))
+        self.TorrentsBTTN.setFlat(True)
+        self.TorrentsBTTN.setObjectName("TorrentsBTTN")
+        
+        self.verticalLayout_3.addWidget(self.TorrentsBTTN)
+        
+        self.TorrentsLABEL = QtWidgets.QLabel(self.torrentsLayout)
+        self.TorrentsLABEL.setMinimumSize(QtCore.QSize(60, 0))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.TorrentsLABEL.setFont(font)
+        self.TorrentsLABEL.setAlignment(QtCore.Qt.AlignCenter)
+        self.TorrentsLABEL.setObjectName("TorrentsLABEL")
+        
+        self.verticalLayout_3.addWidget(self.TorrentsLABEL)
+        
+        self.verticalLayout.addWidget(self.torrentsLayout)
+        
+        self.verticalFrame_2 = QtWidgets.QFrame(self.SideBar)
+        self.verticalFrame_2.setMinimumSize(QtCore.QSize(0, 50))
+        self.verticalFrame_2.setObjectName("verticalFrame_2")
+        
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.verticalFrame_2)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        
+        self.UploadsBTTN = QtWidgets.QPushButton(self.verticalFrame_2)
+        self.UploadsBTTN.setMinimumSize(QtCore.QSize(35, 35))
+        self.UploadsBTTN.setMaximumSize(QtCore.QSize(100, 100))
+        font = QtGui.QFont()
+        font.setFamily("MS Sans Serif")
+        self.UploadsBTTN.setFont(font)
+        self.UploadsBTTN.setAutoFillBackground(False)
+        self.UploadsBTTN.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("View\Material Icons\cloud_upload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.UploadsBTTN.setIcon(icon2)
+        self.UploadsBTTN.setIconSize(QtCore.QSize(35, 35))
+        self.UploadsBTTN.setFlat(True)
+        self.UploadsBTTN.setObjectName("UploadsBTTN")
+        
+        self.verticalLayout_4.addWidget(self.UploadsBTTN)
+        
+        self.UploadLABEL = QtWidgets.QLabel(self.verticalFrame_2)
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.UploadLABEL.setFont(font)
+        self.UploadLABEL.setAlignment(QtCore.Qt.AlignCenter)
+        self.UploadLABEL.setObjectName("UploadLABEL")
+        
+        self.verticalLayout_4.addWidget(self.UploadLABEL)
+        
+        self.verticalLayout.addWidget(self.verticalFrame_2)
+        
+        self.settingsLayout = QtWidgets.QFrame(self.SideBar)
+        self.settingsLayout.setMinimumSize(QtCore.QSize(50, 50))
+        self.settingsLayout.setObjectName("settingsLayout")
+        
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.settingsLayout)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        
+        self.SettingsBTTN = QtWidgets.QPushButton(self.settingsLayout)
+        self.SettingsBTTN.setMinimumSize(QtCore.QSize(35, 35))
+        self.SettingsBTTN.setMaximumSize(QtCore.QSize(100, 100))
+        font = QtGui.QFont()
+        font.setFamily("MS Sans Serif")
+        self.SettingsBTTN.setFont(font)
+        self.SettingsBTTN.setAutoFillBackground(False)
+        self.SettingsBTTN.setText("")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("View\Material Icons\settings.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.SettingsBTTN.setIcon(icon3)
+        self.SettingsBTTN.setIconSize(QtCore.QSize(35, 35))
+        self.SettingsBTTN.setFlat(True)
+        self.SettingsBTTN.setObjectName("SettingsBTTN")
+        
+        self.verticalLayout_5.addWidget(self.SettingsBTTN)
+        
+        self.SettingsLABEL = QtWidgets.QLabel(self.settingsLayout)
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.SettingsLABEL.setFont(font)
+        self.SettingsLABEL.setAlignment(QtCore.Qt.AlignCenter)
+        self.SettingsLABEL.setObjectName("SettingsLABEL")
+        
+        self.verticalLayout_5.addWidget(self.SettingsLABEL)
+        
+        self.verticalLayout.addWidget(self.settingsLayout)
+        
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem1)
+        
+        self.LogoutFrame = QtWidgets.QFrame(self.SideBar)
+        self.LogoutFrame.setMinimumSize(QtCore.QSize(50, 50))
+        self.LogoutFrame.setObjectName("LogoutFrame")
+        
+        self.logoutLayout = QtWidgets.QVBoxLayout(self.LogoutFrame)
+        self.logoutLayout.setObjectName("logoutLayout")
+        
+        self.LogoutBTTN = QtWidgets.QPushButton(self.LogoutFrame)
+        self.LogoutBTTN.setMinimumSize(QtCore.QSize(35, 35))
+        self.LogoutBTTN.setMaximumSize(QtCore.QSize(100, 100))
+        font = QtGui.QFont()
+        font.setFamily("MS Sans Serif")
+        self.LogoutBTTN.setFont(font)
+        self.LogoutBTTN.setAutoFillBackground(False)
+        self.LogoutBTTN.setText("")
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("View\Material Icons\logout.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.LogoutBTTN.setIcon(icon4)
+        self.LogoutBTTN.setIconSize(QtCore.QSize(35, 35))
+        self.LogoutBTTN.setFlat(True)
+        self.LogoutBTTN.setObjectName("LogoutBTTN")
+        
+        self.logoutLayout.addWidget(self.LogoutBTTN)
+        
+        self.LogoutLABEL = QtWidgets.QLabel(self.LogoutFrame)
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.LogoutLABEL.setFont(font)
+        self.LogoutLABEL.setAlignment(QtCore.Qt.AlignCenter)
+        self.LogoutLABEL.setObjectName("LogoutLABEL")
+        
+        self.logoutLayout.addWidget(self.LogoutLABEL)
+        
+        self.verticalLayout.addWidget(self.LogoutFrame)
+        
+        self.gridLayout.addWidget(self.SideBar, 0, 0, 7, 1)
         
         self.BoxFrame = QtWidgets.QFrame(self.centralwidget)
-        self.BoxFrame.setGeometry(QtCore.QRect(79, 39, 1351, 501))
+        self.BoxFrame.setMinimumSize(QtCore.QSize(1000, 480))
+        self.BoxFrame.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.BoxFrame.setFrameShape(QtWidgets.QFrame.Box)
+        self.BoxFrame.setFrameShadow(QtWidgets.QFrame.Plain)
         self.BoxFrame.setObjectName("BoxFrame")
         
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.BoxFrame)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        
         self.BytesUpBox = QtWidgets.QFrame(self.BoxFrame)
-        self.BytesUpBox.setGeometry(QtCore.QRect(40, 50, 300, 300))
+        self.BytesUpBox.setMaximumSize(QtCore.QSize(300, 300))
         self.BytesUpBox.setFrameShape(QtWidgets.QFrame.Box)
         self.BytesUpBox.setFrameShadow(QtWidgets.QFrame.Plain)
         self.BytesUpBox.setObjectName("BytesUpBox")
@@ -196,7 +337,7 @@ class MainWindow(QMainWindow):
         self.UploadLabel = QtWidgets.QLabel(self.BytesUpBox)
         self.UploadLabel.setGeometry(QtCore.QRect(20, 20, 77, 77))
         self.UploadLabel.setText("")
-        self.UploadLabel.setPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\cloud_upload.png"))
+        self.UploadLabel.setPixmap(QtGui.QPixmap("View\Material Icons\cloud_upload.png"))
         self.UploadLabel.setScaledContents(True)
         self.UploadLabel.setObjectName("UploadLabel")
         
@@ -220,18 +361,20 @@ class MainWindow(QMainWindow):
         self.UpLabel.setFont(font)
         self.UpLabel.setObjectName("UpLabel")
         
+        self.horizontalLayout_2.addWidget(self.BytesUpBox)
+        
         self.BytesDownBox = QtWidgets.QFrame(self.BoxFrame)
-        self.BytesDownBox.setGeometry(QtCore.QRect(360, 50, 300, 300))
+        self.BytesDownBox.setMaximumSize(QtCore.QSize(300, 300))
         self.BytesDownBox.setFrameShape(QtWidgets.QFrame.Box)
         self.BytesDownBox.setFrameShadow(QtWidgets.QFrame.Plain)
         self.BytesDownBox.setObjectName("BytesDownBox")
         
-        self.DownloadIcon = QtWidgets.QLabel(self.BytesDownBox)
-        self.DownloadIcon.setGeometry(QtCore.QRect(20, 20, 77, 77))
-        self.DownloadIcon.setText("")
-        self.DownloadIcon.setPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\cloud_download.png"))
-        self.DownloadIcon.setScaledContents(True)
-        self.DownloadIcon.setObjectName("DownloadIcon")
+        self.DownloadLabel_2 = QtWidgets.QLabel(self.BytesDownBox)
+        self.DownloadLabel_2.setGeometry(QtCore.QRect(20, 20, 77, 77))
+        self.DownloadLabel_2.setText("")
+        self.DownloadLabel_2.setPixmap(QtGui.QPixmap("View\Material Icons\cloud_download.png"))
+        self.DownloadLabel_2.setScaledContents(True)
+        self.DownloadLabel_2.setObjectName("DownloadLabel_2")
         
         self.DownloadSizeLabel = QtWidgets.QLabel(self.BytesDownBox)
         self.DownloadSizeLabel.setGeometry(QtCore.QRect(30, 200, 169, 40))
@@ -253,8 +396,10 @@ class MainWindow(QMainWindow):
         self.DownLabel.setFont(font)
         self.DownLabel.setObjectName("DownLabel")
         
+        self.horizontalLayout_2.addWidget(self.BytesDownBox)
+        
         self.TotalDownBox = QtWidgets.QFrame(self.BoxFrame)
-        self.TotalDownBox.setGeometry(QtCore.QRect(680, 50, 300, 300))
+        self.TotalDownBox.setMaximumSize(QtCore.QSize(300, 300))
         self.TotalDownBox.setFrameShape(QtWidgets.QFrame.Box)
         self.TotalDownBox.setFrameShadow(QtWidgets.QFrame.Plain)
         self.TotalDownBox.setObjectName("TotalDownBox")
@@ -262,7 +407,7 @@ class MainWindow(QMainWindow):
         self.HardDriveLabel = QtWidgets.QLabel(self.TotalDownBox)
         self.HardDriveLabel.setGeometry(QtCore.QRect(20, 20, 77, 77))
         self.HardDriveLabel.setText("")
-        self.HardDriveLabel.setPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\hard_drive_2.png"))
+        self.HardDriveLabel.setPixmap(QtGui.QPixmap("View\Material Icons\hard_drive_2.png"))
         self.HardDriveLabel.setScaledContents(True)
         self.HardDriveLabel.setObjectName("HardDriveLabel")
         
@@ -286,8 +431,10 @@ class MainWindow(QMainWindow):
         self.TotalLabel.setFont(font)
         self.TotalLabel.setObjectName("TotalLabel")
         
+        self.horizontalLayout_2.addWidget(self.TotalDownBox)
+        
         self.TorrentDownBox = QtWidgets.QFrame(self.BoxFrame)
-        self.TorrentDownBox.setGeometry(QtCore.QRect(1000, 50, 300, 300))
+        self.TorrentDownBox.setMaximumSize(QtCore.QSize(300, 300))
         self.TorrentDownBox.setFrameShape(QtWidgets.QFrame.Box)
         self.TorrentDownBox.setFrameShadow(QtWidgets.QFrame.Plain)
         self.TorrentDownBox.setObjectName("TorrentDownBox")
@@ -295,7 +442,7 @@ class MainWindow(QMainWindow):
         self.TorrentLabel = QtWidgets.QLabel(self.TorrentDownBox)
         self.TorrentLabel.setGeometry(QtCore.QRect(110, 20, 77, 77))
         self.TorrentLabel.setText("")
-        self.TorrentLabel.setPixmap(QtGui.QPixmap("mgTorrent\View\Material Icons\download.png"))
+        self.TorrentLabel.setPixmap(QtGui.QPixmap("View\Material Icons\download.png"))
         self.TorrentLabel.setScaledContents(True)
         self.TorrentLabel.setObjectName("TorrentLabel")
         
@@ -331,7 +478,8 @@ class MainWindow(QMainWindow):
         
         self.BrowseBTTN = QtWidgets.QPushButton(self.TorrentDownBox)
         self.BrowseBTTN.setGeometry(QtCore.QRect(45, 220, 210, 50))
-        self.BrowseBTTN.setCursor(QtCore.Qt.PointingHandCursor)
+        self.BrowseBTTN.setMinimumSize(QtCore.QSize(70, 50))
+        self.BrowseBTTN.setMaximumSize(QtCore.QSize(210, 50))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -340,8 +488,18 @@ class MainWindow(QMainWindow):
         self.BrowseBTTN.setFont(font)
         self.BrowseBTTN.setObjectName("BrowseBTTN")
         
-        self.RecentTorrents = QtWidgets.QLabel(self.centralwidget)
-        self.RecentTorrents.setGeometry(QtCore.QRect(120, 515, 131, 20))
+        self.horizontalLayout_2.addWidget(self.TorrentDownBox)
+        
+        self.gridLayout.addWidget(self.BoxFrame, 1, 1, 1, 2)
+        
+        self.RecentTorrentShowAllFrame = QtWidgets.QFrame(self.centralwidget)
+        self.RecentTorrentShowAllFrame.setMinimumSize(QtCore.QSize(1000, 0))
+        self.RecentTorrentShowAllFrame.setObjectName("RecentTorrentShowAllFrame")
+        
+        self.RecentTorrentShowAllLayout = QtWidgets.QHBoxLayout(self.RecentTorrentShowAllFrame)
+        self.RecentTorrentShowAllLayout.setObjectName("RecentTorrentShowAllLayout")
+        
+        self.RecentTorrents = QtWidgets.QLabel(self.RecentTorrentShowAllFrame)
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(13)
@@ -350,18 +508,28 @@ class MainWindow(QMainWindow):
         self.RecentTorrents.setFont(font)
         self.RecentTorrents.setObjectName("RecentTorrents")
         
-        self.SeeAllTorrentsBTTN = QtWidgets.QLabel(self.centralwidget)
-        self.SeeAllTorrentsBTTN.setGeometry(QtCore.QRect(1300, 515, 111, 21))
-        self.SeeAllTorrentsBTTN.setCursor(QtCore.Qt.PointingHandCursor)
+        self.RecentTorrentShowAllLayout.addWidget(self.RecentTorrents)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.RecentTorrentShowAllLayout.addItem(spacerItem2)
+        
+        self.SeeAllTorrentsBTTN = QtWidgets.QLabel(self.RecentTorrentShowAllFrame)
+        self.SeeAllTorrentsBTTN.setMinimumSize(QtCore.QSize(10, 21))
+        self.SeeAllTorrentsBTTN.setMaximumSize(QtCore.QSize(115, 25))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(9)
         font.setBold(True)
         font.setWeight(75)
         self.SeeAllTorrentsBTTN.setFont(font)
+        self.SeeAllTorrentsBTTN.setCursor(QtCore.Qt.PointingHandCursor)
         self.SeeAllTorrentsBTTN.setObjectName("SeeAllTorrentsBTTN")
         
+        self.RecentTorrentShowAllLayout.addWidget(self.SeeAllTorrentsBTTN)
+        
+        self.gridLayout.addWidget(self.RecentTorrentShowAllFrame, 3, 1, 3, 2)
+        
         MainWindow.setCentralWidget(self.centralwidget)
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -370,7 +538,7 @@ class MainWindow(QMainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.NoDownloadsLabel.setText(_translate("MainWindow", "Looks like there is nothing here, Start Downloading!"))
         self.LogoutLABEL.setText(_translate("MainWindow", "LOGOUT"))
-        self.DashboardLABEL.setText(_translate("MainWindow", "DASHBOARD"))
+        self.HomeLABEL.setText(_translate("MainWindow", "HOME"))
         self.TorrentsLABEL.setText(_translate("MainWindow", "TORRENTS"))
         self.UploadLABEL.setText(_translate("MainWindow", "UPLOAD"))
         self.SettingsLABEL.setText(_translate("MainWindow", "SETTINGS"))
@@ -389,22 +557,16 @@ class MainWindow(QMainWindow):
         self.RecentTorrents.setText(_translate("MainWindow", "Recent Torrents"))
         self.SeeAllTorrentsBTTN.setText(_translate("MainWindow", "SEE ALL TORRENTS"))
 
-        vf.load_stylesheet(self, "mgTorrent\View\Styles\Main.css")
+        vf.load_stylesheet(self, "View\Styles\Main.css")
         
     #This method connects the UI components to the controller methods.    
     def init_controller_connections(self):
         # Connecting sidebar buttons to controller methods
         self.LogoutBTTN.clicked.connect(self.mainController.logout)
         self.BrowseBTTN.clicked.connect(self.mainController.browse) 
-    
-    def hideLabels(self):
-        self.NoDownloadsLabel.hide()    
-        
+      
     def center(self):
-        qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())    
+        self.showMaximized()
         
 if __name__ == "__main__":
     

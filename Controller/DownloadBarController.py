@@ -1,5 +1,5 @@
 import logging
-from Util.TorrentManager import TorrentDownloadThread as tdt
+from Model.TorrentManager import TorrentDownloadThread as tdt
 from PyQt5.QtCore import QObject
 
 class DownloadBarController(QObject):

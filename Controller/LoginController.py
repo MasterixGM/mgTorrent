@@ -1,11 +1,12 @@
 import sys, os, logging
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from PyQt5.QtWidgets import QApplication
-from Util.MessageHandler import MessageHandler
+from Model.MessageHandler import MessageHandler
 from View.Register import Register
 from View.MainWindow import MainWindow
+from Controller.MainWindowController import MainController
 from Controller.RegisterController import RegisterController
-from Util.DBHandler import DBManager
+from Model.DBHandler import DBManager
 
 class ControladorLogin:
     def __init__(self):
@@ -24,6 +25,7 @@ class ControladorLogin:
 
     def login(self, user_or_email, password):
         from View.MainWindow import MainWindow
+        from Controller.MainWindowController import MainController
         try:
             # Log para verificar los valores de entrada
             self.logger.debug(f"Attempting login for: {user_or_email}")
@@ -32,8 +34,9 @@ class ControladorLogin:
                 if self.db_handler.check_password(user_or_email, password):
                     self.logger.info(f"Login successful for user: {user_or_email}")
                     self.login_view.hide()
-                    self.main_window = MainWindow()
+                    self.main_window = MainWindow(MainController(MainWindow))
                     self.main_window.show()
+                    self.main_window.center()
                 else:
                     self.logger.warning(f"Incorrect password for user: {user_or_email}")
                     self.message_Handler.showErrorMessage(message="User or password is incorrect, please try again.")
@@ -56,10 +59,12 @@ class ControladorLogin:
     def login_as_guest(self):
         try:
             self.login_view.hide()
-            self.main_window = MainWindow()
+            self.main_window = MainWindow(MainController(MainWindow))
             self.main_window.show()
+            self.main_window.center()
             # Need to Apply something to block options
-        except:
+        except Exception as e:
+            self.logger.error(f"Error when logging as guest: {str(e)}")
             self.message_Handler.showErrorMessage(message="An error occurred, please try again later.")
         
     def rememberMe(self):  # Pending on Implementation
