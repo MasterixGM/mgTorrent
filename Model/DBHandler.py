@@ -30,7 +30,7 @@ class DBManager:
                               INSERT INTO users (username, password, email)
                               VALUES (?, ?, ?)
                                 """, (username.lower(), password.lower(), email.lower()))
-            self.logger.debug("User added with username: {}, password: {}, email{}".format(username, password, email))
+            self.logger.debug("User added with username: {}, password: {}, email: {}".format(username, password, email))
             print("User added Succesfully")
         except sqlite3.Error as e:
             self.logger.error("Error adding user: {}".format(e))

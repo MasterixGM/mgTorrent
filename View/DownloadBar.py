@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 from Controller.DownloadBarController import DownloadBarController
 from Model.ViewFunctions import ViewFunctions as vf
+
 class Ui_Form(QWidget):
     def __init__(self):
         super().__init__()
@@ -10,20 +11,21 @@ class Ui_Form(QWidget):
         self.downloadController = DownloadBarController(self)
         if self.downloadController.download_thread:
             self.downloadController.download_thread.progress_updated.connect(self.update_ui)
-        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',handlers=[logging.FileHandler("mgTorrent.log"), logging.StreamHandler()])
-        self.logger = logging.getLogger(__name__)    
+        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                            handlers=[logging.FileHandler("mgTorrent.log"), logging.StreamHandler()])
+        self.logger = logging.getLogger(__name__)
 
     def setupUi(self):
         self.setObjectName("Form")
-        self.resize(1302, 98)
+        self.resize(1802, 98)
 
         self.frame = QtWidgets.QFrame(self)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 1301, 100))
+        self.frame.setGeometry(QtCore.QRect(0, 0, 1801, 100))
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Plain)
         self.frame.setObjectName("frame")
 
-        # Interface elements such as Download labels, progress bar, etc...
+    # Elementos de la interfaz
         self.Icon = QtWidgets.QLabel(self.frame)
         self.Icon.setGeometry(QtCore.QRect(30, 10, 80, 80))
         self.Icon.setFrameShape(QtWidgets.QFrame.Box)
@@ -87,54 +89,50 @@ class Ui_Form(QWidget):
         self.TimeIcon.setScaledContents(True)
         self.TimeIcon.setObjectName("TimeIcon")
 
+        # Barra de progreso
+        progress_bar_width = int(self.frame.width() * 0.8)
         self.progressBar = QtWidgets.QProgressBar(self.frame)
-        self.progressBar.setGeometry(QtCore.QRect(140, 87, 825, 5))
+        self.progressBar.setGeometry(QtCore.QRect(140, 87, progress_bar_width, 5))
         self.progressBar.setProperty("value", 0)
         self.progressBar.setFormat("")
         self.progressBar.setObjectName("progressBar")
 
+        # Etiqueta de porcentaje
         self.PercentageProgressBar = QtWidgets.QLabel(self.frame)
-        self.PercentageProgressBar.setGeometry(QtCore.QRect(910, 68, 23, 20))
+        self.PercentageProgressBar.setGeometry(QtCore.QRect(140 + progress_bar_width - 30, 68, 40, 20))  # Más cerca del final de la barra
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(8)
         self.PercentageProgressBar.setFont(font)
         self.PercentageProgressBar.setObjectName("PercentageProgressBar")
 
+        # Botones dinámicos
+        button_start_x = 140 + progress_bar_width + 20  # Espacio restante después de la barra
+        button_spacing = 15  # Espaciado entre botones
+
         self.InfoBTTN = QtWidgets.QPushButton(self.frame)
         self.InfoBTTN.setEnabled(True)
-        self.InfoBTTN.setGeometry(QtCore.QRect(944, -10, 181, 111))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        self.InfoBTTN.setFont(font)
-        self.InfoBTTN.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.InfoBTTN.setAutoFillBackground(False)
+        self.InfoBTTN.setGeometry(QtCore.QRect(button_start_x, 10, 50, 50))
         self.InfoBTTN.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("View/Material Icons/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.InfoBTTN.setIcon(icon)
         self.InfoBTTN.setIconSize(QtCore.QSize(24, 24))
-        #self.InfoBTTN.clicked.connect(self.downloadController.show_info)
         self.InfoBTTN.setObjectName("InfoBTTN")
 
         self.PauseBTTN = QtWidgets.QPushButton(self.frame)
         self.PauseBTTN.setEnabled(True)
-        self.PauseBTTN.setGeometry(QtCore.QRect(1120, -10, 181, 111))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        self.PauseBTTN.setFont(font)
-        self.PauseBTTN.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.PauseBTTN.setAutoFillBackground(False)
+        self.PauseBTTN.setGeometry(QtCore.QRect(button_start_x + 50 + button_spacing, 10, 50, 50))
         self.PauseBTTN.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("View/Material Icons/pause_circle.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.PauseBTTN.setIcon(icon1)
         self.PauseBTTN.setIconSize(QtCore.QSize(24, 24))
-        #self.PauseBTTN.clicked.connect(self.downloadController.pause_download)
         self.PauseBTTN.setObjectName("PauseBTTN")
 
+        # Etiquetas de los botones
         self.InfoLabel = QtWidgets.QLabel(self.frame)
-        self.InfoLabel.setGeometry(QtCore.QRect(1021, 60, 31, 16))
+        self.InfoLabel.setGeometry(QtCore.QRect(button_start_x + 10, 60, 50, 16))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(9)
@@ -142,7 +140,7 @@ class Ui_Form(QWidget):
         self.InfoLabel.setObjectName("InfoLabel")
 
         self.PauseLabel = QtWidgets.QLabel(self.frame)
-        self.PauseLabel.setGeometry(QtCore.QRect(1193, 60, 41, 16))
+        self.PauseLabel.setGeometry(QtCore.QRect(button_start_x + 50 + button_spacing + 10, 60, 50, 16))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(9)
@@ -163,17 +161,14 @@ class Ui_Form(QWidget):
         self.PercentageProgressBar.setText(_translate("Form", "0%"))
         self.InfoLabel.setText(_translate("Form", "INFO"))
         self.PauseLabel.setText(_translate("Form", "PAUSE"))
-    
+
     def update_ui(self, progress, download_rate, upload_rate, remaining_time):
-        # Here the UI updates with the download info
         logging.info(f"UI updated with progress: {progress}, download_rate: {download_rate}, upload_rate: {upload_rate}, remaining_time: {remaining_time}")
-        
         try:
             self.progressBar.setValue(progress)
             self.CurrentDownloadLabel.setText(download_rate)
             self.CurrentUploadLabel.setText(upload_rate)
             self.DownloadTimeLabel.setText(remaining_time)
             self.PercentageProgressBar.setText(f"{progress}%")
-            
         except Exception as e:
             logging.error("Error at download updating ui: " + str(e))

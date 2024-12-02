@@ -54,8 +54,8 @@ class TorrentManager:
             print("Error getting torrent status")
             
 class TorrentDownloadThread(QThread):
-    progress_updated = pyqtSignal(int, str, str, str)  # Signal to update the interface (Progress, Download Speed, Upload Speed, Remaining Time).
-    finished = pyqtSignal() # Signal to indicate the download is finished
+    progress_updated = pyqtSignal(int, str, str, str)  # Señal para actualizar la interfaz
+    finished = pyqtSignal()  # Señal para indicar que la descarga finalizó
     
     def __init__(self, torrent_file, save_path):
         super().__init__()
@@ -64,54 +64,58 @@ class TorrentDownloadThread(QThread):
         self.manager = TorrentManager()
         self.handle = None
         self.is_downloading = True
-        self.is_running = False
-
+        self.progress_data = (0, "0.00 MB/s", "0.00 MB/s", "N/A")
+    
     def run(self):
-        # Check if the torrent file already exists in the save path
-            # Check if the torrent is already downloaded
+        try:
             if self.manager.is_torrent_downloaded(self.torrent_file, self.save_path):
                 logging.info("Torrent is already downloaded.")
                 self.finished.emit()
-                
-            else:
-                # Starts the download
-                self.handle = self.manager.download_torrent(self.torrent_file, self.save_path)
-                self.is_running = True
-    
-                # While it's not seeding it starts to download
-                while not self.handle.is_seed():
-                    status = self.manager.get_torrent_status(self.handle)
+                return
 
-                    if status.progress < 100:
-                        # Gathers the progress of the torrent and other data
-                        # Torrent Progress
-                        progress = int(status.progress * 100)
-                        
-                        # Download and Upload Speeds
-                        download_rate = f"{status.download_rate / 1000:.2f} MB/s"
-                        upload_rate = f"{status.upload_rate / 1000:.2f} MB/s"
+            # Inicia la descarga
+            self.handle = self.manager.download_torrent(self.torrent_file, self.save_path)
+            logging.info("Download started.")
 
-                        # Remaining Time
-                        remaining_time = (status.total_wanted - status.total_wanted_done) / status.download_rate if status.download_rate > 0 else 0
-                        remaining_time_str = f"{int(remaining_time // 60)} min {int(remaining_time % 60)} sec"
+            while self.is_downloading and not self.handle.is_seed():
+                # Obtener el estado del torrent
+                status = self.manager.get_torrent_status(self.handle)
+                progress = int(status.progress * 100)
+                download_rate = f"{status.download_rate / 1000:.2f} MB/s"
+                upload_rate = f"{status.upload_rate / 1000:.2f} MB/s"
+                remaining_time = (status.total_wanted - status.total_wanted_done) / status.download_rate if status.download_rate > 0 else 0
+                remaining_time_str = f"{int(remaining_time // 60)} min {int(remaining_time % 60)} sec"
 
-                        # Store the progress data
-                        self.progress_data = (progress, download_rate, upload_rate, remaining_time_str)
+                # Actualiza los datos de progreso
+                self.progress_data = (progress, download_rate, upload_rate, remaining_time_str)
+                self.emit_progress_signal()
 
-                        # Waits so it can try and download again
-                        self.msleep(200)  # 0.2 second wait to not overload the ui
+                # Pausa para no sobrecargar la interfaz
+                self.msleep(200)
+            
+            # Si se convierte en semilla, indica que la descarga terminó
+            if self.handle.is_seed():
+                self.progress_data = (100, "0.00 MB/s", "0.00 MB/s", "0 min 0 sec")
+                self.emit_progress_signal()
+                logging.info("Download completed. Torrent is now a seed.")
+                self.finished.emit()
 
-                        # Sends the progress data
-                        self.emit_progress_signal()  
-                if self.handle.is_seed():
-                    self.progress_data = (100, "0.00 MB/s", "0.00 MB/s", "0 min 0 sec")
-                    self.emit_progress_signal()
-                    logging.info("Download completed. Torrent is now a seed.")
-                    self.is_running = False
-                    self.finished.emit()
-                    
+        except Exception as e:
+            logging.error(f"Error in TorrentDownloadThread: {e}")
+        finally:
+            self.is_downloading = False  # Marca la descarga como detenida
+            logging.info("TorrentDownloadThread has finished.")
+
+    def stop(self):
+        """Solicita detener el hilo."""
+        logging.info("Stopping TorrentDownloadThread...")
+        self.is_downloading = False
+        self.quit()  # Finaliza el bucle de eventos del hilo
+        self.wait()  # Espera a que el hilo termine antes de continuar
+
     def emit_progress_signal(self):
-        # Emit the signal with the stored progress data
+        """Emite la señal de progreso."""
         self.progress_updated.emit(*self.progress_data)
-        logging.info(str(self.progress_data))
+        logging.debug(f"Progress: {self.progress_data}")
+
         
